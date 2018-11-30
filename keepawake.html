@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://download.affectiva.com/js/3.2/affdex.js"></script>
+    <style>
+        #emoji { font-size:10em; }
+    </style>
+    <title>Keep Awake</title>
+</head>
+<body>
+<div id='video'></div>
+<div id='emoji'></div>
+<div id='isAwake'></div>
+<div id='count'></div>
 
+<!--<h1>You have to stay awake, bitch</h1>-->
+</body>
+<script>
+    window.onload = function() {
+        const videoWidth = 640, videoHeight = 480;
+        const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
+        var eyeClosureNumber = 100;
+        var isPlaying = false;
+        var wakeupSound=new Sound("johnCena.mp3",100,true);
+
+        const detector = new affdex.CameraDetector(
+            document.querySelector('#video'),
+            videoWidth, videoHeight, faceMode
+        );
+
+        //detector.detectEmotions.joy = true
+        detector.detectAllExpressions();
+
+        detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
+
+
+            if( faces.length > 0 ) {
+                document.querySelector('#isAwake').innerText = parseFloat(faces[0].expressions.eyeClosure);
+                document.querySelector('#count').innerText = eyeClosureNumber;
+
+                if(parseFloat(faces[0].expressions.eyeClosure) > 0.5 && eyeClosureNumber < 200)
+                {
+                    eyeClosureNumber ++;
+                }
+                else if (eyeClosureNumber > 0)
+                {
+                    eyeClosureNumber --;
+                }
+
+                if(eyeClosureNumber > 100 && !isPlaying)
+                {
+                    wakeupSound.start();
+                    isPlaying = true;
+                }
+                else if(eyeClosureNumber < 100)
+                {
+                    wakeupSound.stop();
+                    isPlaying = false;
+                }
+
+            }
+        });
+        function Sound(source,volume,loop)
+        {
+            this.source=source;
+            this.volume=volume;
+            this.loop=loop;
+            var son;
+            this.son=son;
+            this.finish=false;
+            this.stop=function()
+            {
+                document.body.removeChild(this.son);
+            }
+            this.start=function()
+            {
+                if(this.finish)return false;
+                this.son=document.createElement("embed");
+                this.son.setAttribute("src",this.source);
+                this.son.setAttribute("hidden","true");
+                this.son.setAttribute("volume",this.volume);
+                this.son.setAttribute("autostart","true");
+                this.son.setAttribute("loop",this.loop);
+                document.body.appendChild(this.son);
+            }
+            this.remove=function()
+            {
+                document.body.removeChild(this.son);
+                this.finish=true;
+            }
+            this.init=function(volume,loop)
+            {
+                this.finish=false;
+                this.volume=volume;
+                this.loop=loop;
+            }
+        }
+
+        detector.start()
+    }
+</script>
+</html>
