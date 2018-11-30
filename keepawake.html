@@ -13,7 +13,6 @@
 <div id='isAwake'></div>
 <div id='count'></div>
 
-<!--<h1>You have to stay awake, bitch</h1>-->
 </body>
 <script>
     window.onload = function() {
@@ -21,7 +20,7 @@
         const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
         var eyeClosureNumber = 100;
         var isPlaying = false;
-        var wakeupSound=new Sound("johnCena.mp3",100,true);
+        var wakeupSound=new Sound("gentleAlarm.mp3",100,true);
 
         const detector = new affdex.CameraDetector(
             document.querySelector('#video'),
@@ -38,7 +37,7 @@
                 document.querySelector('#isAwake').innerText = parseFloat(faces[0].expressions.eyeClosure);
                 document.querySelector('#count').innerText = eyeClosureNumber;
 
-                if(parseFloat(faces[0].expressions.eyeClosure) > 0.5 && eyeClosureNumber < 200)
+                if(parseFloat(faces[0].expressions.eyeClosure) > 0.5 && eyeClosureNumber < 5100)
                 {
                     eyeClosureNumber ++;
                 }
@@ -47,12 +46,12 @@
                     eyeClosureNumber --;
                 }
 
-                if(eyeClosureNumber > 100 && !isPlaying)
+                if(eyeClosureNumber > 5000 && !isPlaying)
                 {
                     wakeupSound.start();
                     isPlaying = true;
                 }
-                else if(eyeClosureNumber < 100)
+                else if(eyeClosureNumber < 5000)
                 {
                     wakeupSound.stop();
                     isPlaying = false;
@@ -71,7 +70,7 @@
             this.stop=function()
             {
                 document.body.removeChild(this.son);
-            }
+            };
             this.start=function()
             {
                 if(this.finish)return false;
@@ -82,12 +81,12 @@
                 this.son.setAttribute("autostart","true");
                 this.son.setAttribute("loop",this.loop);
                 document.body.appendChild(this.son);
-            }
+            };
             this.remove=function()
             {
                 document.body.removeChild(this.son);
                 this.finish=true;
-            }
+            };
             this.init=function(volume,loop)
             {
                 this.finish=false;
