@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <script src="https://download.affectiva.com/js/3.2/affdex.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+
+</head>
+<body>
+<div id='video'></div>
+<div id='sadness_level'></div>
+<div id='sadness_time'></div>
+<div id='text'></div>
+</body>
+<script>
+    window.onload = function() {
+        const videoWidth = 640, videoHeight = 480;
+        const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
+        const detector = new affdex.CameraDetector(
+            document.querySelector('#video'),
+            videoWidth, videoHeight, faceMode
+        );
+        var sadTime = 0; //how long the user has a sad face
+
+        detector.detectEmotions.sadness = true;
+        //detector.detectAllEmojis()
+
+        detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
+            if( faces.length > 0 ) {
+                document.querySelector('#sadness_level').innerText = "Sadness: " + faces[0].emotions.sadness;
+                document.querySelector('#sadness_time').innerText = "Sadness time: " + sadTime;
+                if(faces[0].emotions.sadness > 50) {
+                    sadTime++;
+                }
+
+                if(sadTime > 30) {
+                    openPage();
+                    sadTime = 0;
+                }
+            }
+        });
+
+        detector.start()
+    };
+    function openPage()
+    {
+        window.open("http://cdn.themis-media.com/media/global/images/library/deriv/51/51557.jpg", '_blank');
+    }
+</script>
+</html>
