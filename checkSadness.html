@@ -9,8 +9,26 @@
 <div id='sadness_level'></div>
 <div id='sadness_time'></div>
 <div id='text'></div>
+<div id='reset_button'> <button onclick = "reset()">Reset</button> </div>
+<div id='cute1'>     <img src="https://pbs.twimg.com/media/CvqrAX4W8AIjvkr.jpg" style="margin:auto; width:480px;display:inline"> </div>
+<div id='cute2'>     <img src="https://i.redd.it/6vhsaz2s4w121.jpg" style="margin:auto; width:480px;display:inline"> </div>
+<div id='cute3'>     <img src="https://i.redd.it/bus0pvuczw121.jpg" style="margin:auto; width:480px;display:inline"> </div>
+<div id='cute4'>     <img src="https://i.redd.it/e6qsmjy23w121.jpg" style="margin:auto; width:480px;display:inline"> </div>
+<div id='cute5'>     <img src="https://i.redd.it/8i2j4vjktu121.jpg" style="margin:auto; width:480px;display:inline"> </div>
+<div id='cute6'>     <img src="https://i.redd.it/cj05kafn6w121.jpg" style="margin:auto; width:480px;display:inline"> </div>
+<div id='cute7'>     <img src="https://i.redd.it/01hbdgz4mu121.png" style="margin:auto; width:480px;display:inline"> </div>
 </body>
 <script>
+    $('#text').hide();
+    $('#reset_button').hide();
+    $('#cute1').hide();
+    $('#cute2').hide();
+    $('#cute3').hide();
+    $('#cute4').hide();
+    $('#cute5').hide();
+    $('#cute6').hide();
+    $('#cute7').hide();
+
     window.onload = function() {
         const videoWidth = 640, videoHeight = 480;
         const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
@@ -25,14 +43,16 @@
 
         detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
             if( faces.length > 0 ) {
+                // on screen counters for sadness level and time
                 document.querySelector('#sadness_level').innerText = "Sadness: " + faces[0].emotions.sadness;
                 document.querySelector('#sadness_time').innerText = "Sadness time: " + sadTime;
-                if(faces[0].emotions.sadness > 50) {
+
+                if(faces[0].emotions.sadness > 15) { // if sadness level is high enough, start the counter
                     sadTime++;
                 }
 
-                if(sadTime > 30) {
-                    openPage();
+                if(sadTime > 15) { // if sadness has been high for 30 units, open the cute picture
+                    showCute();
                     sadTime = 0;
                 }
             }
@@ -40,9 +60,61 @@
 
         detector.start()
     };
-    function openPage()
-    {
-        window.open("http://cdn.themis-media.com/media/global/images/library/deriv/51/51557.jpg", '_blank');
+
+    function showCute() {
+        reset(); //just in case
+
+        $('#video').hide();
+        $('#sadness_level').hide();
+        $('#sadness_time').hide();
+
+        $('#text').show();
+        $('#reset_button').show();
+
+        //show a random image
+        var random = Math.floor((Math.random() * 7) + 1);
+        switch(random) {
+            case 1:
+                $('#cute1').show();
+                break;
+            case 2:
+                $('#cute2').show();
+                break;
+            case 3:
+                $('#cute3').show();
+                break;
+            case 4:
+                $('#cute4').show();
+                break;
+            case 5:
+                $('#cute5').show();
+                break;
+            case 6:
+                $('#cute6').show();
+                break;
+            case 7:
+                $('#cute7').show();
+                break;
+            default:
+                $('#cute1').show();
+        }
     }
+    function reset() {
+        $('#video').show();
+        $('#sadness_level').show();
+        $('#sadness_time').show();
+
+        $('#text').hide();
+        $('#reset_button').hide();
+
+        $('#cute1').hide();
+        $('#cute2').hide();
+        $('#cute3').hide();
+        $('#cute4').hide();
+        $('#cute5').hide();
+        $('#cute6').hide();
+        $('#cute7').hide();
+    }
+
 </script>
 </html>
