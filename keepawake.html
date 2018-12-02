@@ -8,20 +8,25 @@
     <title>Keep Awake</title>
 </head>
 <body>
+<audio id="myAudio">
+    <source src="gentleAlarm.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
 <div id='video'></div>
-<div id='emoji'></div>
 <div id='isAwake'></div>
 <div id='count'></div>
 
-</body>
 <script>
+    var numSecPassedWithEyesClosed = 10;
+    var isPlaying = false;
+    const wakeupSound = document.getElementById("myAudio");
+
     window.onload = function() {
+        wakeupSound.play();
+        wakeupSound.pause();
+    };
         const videoWidth = 640, videoHeight = 480;
         const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
-        var eyeClosureNumber = 100;
-        var isPlaying = false;
-        var wakeupSound=new Sound("gentleAlarm.mp3",100,true);
-
         const detector = new affdex.CameraDetector(
             document.querySelector('#video'),
             videoWidth, videoHeight, faceMode
@@ -30,72 +35,45 @@
         //detector.detectEmotions.joy = true
         detector.detectAllExpressions();
 
+        setInterval(incrementTime, 1000);
+        var secondsPassed = 0;
+        var prevSecondsPassed = 0;
+
+        function incrementTime() {
+            secondsPassed++;
+        }
+
         detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
-
-
-            if( faces.length > 0 ) {
+            if( faces.length > 0 && secondsPassed > prevSecondsPassed) {
+                prevSecondsPassed = secondsPassed;
                 document.querySelector('#isAwake').innerText = parseFloat(faces[0].expressions.eyeClosure);
-                document.querySelector('#count').innerText = eyeClosureNumber;
+                document.querySelector('#count').innerText = numSecPassedWithEyesClosed + " seconds";
 
-                if(parseFloat(faces[0].expressions.eyeClosure) > 0.5 && eyeClosureNumber < 5100)
+                if(parseFloat(faces[0].expressions.eyeClosure) > 0.5 && numSecPassedWithEyesClosed < 31)
                 {
-                    eyeClosureNumber ++;
+                    numSecPassedWithEyesClosed ++;
                 }
-                else if (eyeClosureNumber > 0)
+                else if (numSecPassedWithEyesClosed > 0)
                 {
-                    eyeClosureNumber --;
+                    numSecPassedWithEyesClosed -= 3;
                 }
 
-                if(eyeClosureNumber > 5000 && !isPlaying)
+                if(numSecPassedWithEyesClosed > 15 && !isPlaying)
                 {
-                    wakeupSound.start();
+                    wakeupSound.play();
                     isPlaying = true;
                 }
-                else if(eyeClosureNumber < 5000)
+                else if(numSecPassedWithEyesClosed < 15)
                 {
-                    wakeupSound.stop();
+                    wakeupSound.pause();
                     isPlaying = false;
                 }
 
             }
         });
-        function Sound(source,volume,loop)
-        {
-            this.source=source;
-            this.volume=volume;
-            this.loop=loop;
-            var son;
-            this.son=son;
-            this.finish=false;
-            this.stop=function()
-            {
-                document.body.removeChild(this.son);
-            };
-            this.start=function()
-            {
-                if(this.finish)return false;
-                this.son=document.createElement("embed");
-                this.son.setAttribute("src",this.source);
-                this.son.setAttribute("hidden","true");
-                this.son.setAttribute("volume",this.volume);
-                this.son.setAttribute("autostart","true");
-                this.son.setAttribute("loop",this.loop);
-                document.body.appendChild(this.son);
-            };
-            this.remove=function()
-            {
-                document.body.removeChild(this.son);
-                this.finish=true;
-            };
-            this.init=function(volume,loop)
-            {
-                this.finish=false;
-                this.volume=volume;
-                this.loop=loop;
-            }
-        }
 
-        detector.start()
-    }
+        detector.start();
+    //}
 </script>
+</body>
 </html>
