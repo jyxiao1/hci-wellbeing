@@ -12,6 +12,7 @@
     <source src="gentleAlarm.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
+<button onclick="playAudio()" type="button">Play Audio</button>
 <div id='video'></div>
 <div id='isAwake'></div>
 <div id='count'></div>
@@ -20,6 +21,11 @@
     var numSecPassedWithEyesClosed = 10;
     var isPlaying = false;
     const wakeupSound = document.getElementById("myAudio");
+
+    function playAudio() {
+        wakeupSound.play();
+    }
+
 
     window.onload = function() {
         wakeupSound.play();
@@ -46,10 +52,8 @@
         detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
             if( faces.length > 0 && secondsPassed > prevSecondsPassed) {
                 prevSecondsPassed = secondsPassed;
-                document.querySelector('#isAwake').innerText = parseFloat(faces[0].expressions.eyeClosure);
-                document.querySelector('#count').innerText = numSecPassedWithEyesClosed + " seconds";
 
-                if(parseFloat(faces[0].expressions.eyeClosure) > 0.5 && numSecPassedWithEyesClosed < 31)
+                if(parseFloat(faces[0].expressions.eyeClosure) > 0.3 && numSecPassedWithEyesClosed < 31)
                 {
                     numSecPassedWithEyesClosed ++;
                 }
@@ -66,8 +70,12 @@
                 else if(numSecPassedWithEyesClosed < 15)
                 {
                     wakeupSound.pause();
+                    wakeupSound.load();
                     isPlaying = false;
                 }
+
+                document.querySelector('#isAwake').innerText = parseFloat(faces[0].expressions.eyeClosure);
+                document.querySelector('#count').innerText = numSecPassedWithEyesClosed + " seconds";
 
             }
         });
