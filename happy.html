@@ -138,22 +138,17 @@ onImageResults success is called when a frame is processed successfully and rece
                     isPlaying = true;
                     confettiOn = true;
                     numberOfPieces = 75;
+                    update();
+                    draw();
                 } else if (smileNumber < 100) {
                     myMusic.stop();
                     isPlaying = false;
                     confettiOn = false;
                     numberOfPieces = 0;
+                    update();
                 }
 
             }
-            if (confettiOn){
-                update();
-                draw();
-            }
-            else {
-                update();
-            }
-
         });
 
         function Sound(source, volume, loop) {
