@@ -2,21 +2,39 @@
 <head>
     <script src="https://download.affectiva.com/js/3.2/affdex.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <style>
+        .button {
+            background-color: orange;
+            border: none;
+            color: black;
+            padding: 15px 25px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
+        .button:hover {
+            background-color: darkorange;
+        }
+    </style>
+</head>
 </head>
 <body>
 <div id='video'></div>
 <div id='sadness_level'></div>
 <div id='sadness_time'></div>
-<div id='text'></div>
-<div id='reset_button'> <button onclick = "reset()">Reset</button> </div>
+
+<div id='reset_button'> <button class="button" onclick = "reset()">Reset</button> </div>
+<div id='text'> <p style="font-size:160%;">Hey there, you look like you need some cute animals in your life, here you go!</p></div>
+
 <div id='cute1'>     <img src="https://pbs.twimg.com/media/CvqrAX4W8AIjvkr.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute2'>     <img src="https://i.redd.it/6vhsaz2s4w121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute3'>     <img src="https://i.redd.it/bus0pvuczw121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute4'>     <img src="https://i.redd.it/e6qsmjy23w121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute5'>     <img src="https://i.redd.it/8i2j4vjktu121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute6'>     <img src="https://i.redd.it/cj05kafn6w121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute7'>     <img src="https://i.redd.it/01hbdgz4mu121.png" style="margin:auto; width:480px;display:inline"> </div>
+<div id='cute2'>     <img src="https://i.redd.it/6vhsaz2s4w121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute3'>     <img src="https://i.redd.it/bus0pvuczw121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute4'>     <img src="https://i.redd.it/e6qsmjy23w121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute5'>     <img src="https://i.redd.it/8i2j4vjktu121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute6'>     <img src="https://i.redd.it/cj05kafn6w121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute7'>     <img src="https://i.redd.it/01hbdgz4mu121.png" style="margin:auto; width:400px;display:inline"> </div>
+
 </body>
 <script>
     $('#text').hide();
