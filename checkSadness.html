@@ -4,22 +4,40 @@
 <head>
     <script src="https://download.affectiva.com/js/3.2/affdex.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <style>
+        .button {
+            background-color: orange;
+            border: none;
+            color: black;
+            padding: 15px 25px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: darkorange;
+        }
+    </style>
 
 </head>
+
 <body>
 <a href="index.html">Back to home</a>
+<div id='title'> <p style="font-size:200%;">Cheer Up</p> </div>
 <div id='video'></div>
 <div id='sadness_level'></div>
 <div id='sadness_time'></div>
-<div id='text'></div>
-<div id='reset_button'> <button onclick = "reset()">Reset</button> </div>
+<div id='reset_button'> <button class="button" onclick = "reset()">Reset</button> </div>
+<div id='text'> <p style="font-size:160%;">Hey there, you look like you need some cute animals in your life, here you go!</p></div>
+
 <div id='cute1'>     <img src="https://pbs.twimg.com/media/CvqrAX4W8AIjvkr.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute2'>     <img src="https://i.redd.it/6vhsaz2s4w121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute3'>     <img src="https://i.redd.it/bus0pvuczw121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute4'>     <img src="https://i.redd.it/e6qsmjy23w121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute5'>     <img src="https://i.redd.it/8i2j4vjktu121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute6'>     <img src="https://i.redd.it/cj05kafn6w121.jpg" style="margin:auto; width:480px;display:inline"> </div>
-<div id='cute7'>     <img src="https://i.redd.it/01hbdgz4mu121.png" style="margin:auto; width:480px;display:inline"> </div>
+<div id='cute2'>     <img src="https://i.redd.it/6vhsaz2s4w121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute3'>     <img src="https://i.redd.it/bus0pvuczw121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute4'>     <img src="https://i.redd.it/e6qsmjy23w121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute5'>     <img src="https://i.redd.it/8i2j4vjktu121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute6'>     <img src="https://i.redd.it/cj05kafn6w121.jpg" style="margin:auto; width:400px;display:inline"> </div>
+<div id='cute7'>     <img src="https://i.redd.it/01hbdgz4mu121.png" style="margin:auto; width:400px;display:inline"> </div>
+
 </body>
 <script>
     $('#text').hide();
@@ -47,14 +65,14 @@
         detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
             if( faces.length > 0 ) {
                 // on screen counters for sadness level and time
-                document.querySelector('#sadness_level').innerText = "Sadness: " + faces[0].emotions.sadness;
-                document.querySelector('#sadness_time').innerText = "Sadness time: " + sadTime;
+                document.querySelector('#sadness_level').innerText = "Sadness Levels: " + Math.round(faces[0].emotions.sadness);
+                //document.querySelector('#sadness_time').innerText = "Sadness time: " + sadTime;
 
-                if(faces[0].emotions.sadness > 15) { // if sadness level is high enough, start the counter
+                if(faces[0].emotions.sadness > 25) { // if sadness level is high enough (25/100), start the counter
                     sadTime++;
                 }
 
-                if(sadTime > 15) { // if sadness has been high for 30 units, open the cute picture
+                if(sadTime > 25) { // if sadness has been high for 25 units, open the cute picture
                     showCute();
                     sadTime = 0;
                 }
@@ -65,8 +83,9 @@
     };
 
     function showCute() {
-        reset(); //just in case
+        reset(); //just in case (so images don't display over one another)
 
+        $('#title').hide();
         $('#video').hide();
         $('#sadness_level').hide();
         $('#sadness_time').hide();
@@ -103,6 +122,7 @@
         }
     }
     function reset() {
+        $('#title').show();
         $('#video').show();
         $('#sadness_level').show();
         $('#sadness_time').show();
