@@ -8,29 +8,28 @@
     <title>Keep Awake</title>
 </head>
 <body>
-<audio id="myAudio">
+<audio id="alarm">
     <source src="gentleAlarm.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
-<button onclick="playAudio()" type="button">Play Audio</button>
+<a href="index.html">Back to home</a>
 <div id='video'></div>
+<button onclick="playAudio()" type="button">Play Audio</button>
 <div id='isAwake'></div>
 <div id='count'></div>
 
 <script>
     var numSecPassedWithEyesClosed = 10;
     var isPlaying = false;
-    const wakeupSound = document.getElementById("myAudio");
+    const wakeupSound = document.getElementById("alarm");
 
     function playAudio() {
         wakeupSound.play();
+        startCamera();
     }
 
 
-    window.onload = function() {
-        wakeupSound.play();
-        wakeupSound.pause();
-    };
+    function startCamera() {
         const videoWidth = 640, videoHeight = 480;
         const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
         const detector = new affdex.CameraDetector(
@@ -49,26 +48,20 @@
             secondsPassed++;
         }
 
-        detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
-            if( faces.length > 0 && secondsPassed > prevSecondsPassed) {
+        detector.addEventListener('onImageResultsSuccess', function (faces) {
+            if (faces.length > 0 && secondsPassed > prevSecondsPassed) {
                 prevSecondsPassed = secondsPassed;
 
-                if(parseFloat(faces[0].expressions.eyeClosure) > 0.3 && numSecPassedWithEyesClosed < 31)
-                {
-                    numSecPassedWithEyesClosed ++;
-                }
-                else if (numSecPassedWithEyesClosed > 0)
-                {
+                if (parseFloat(faces[0].expressions.eyeClosure) > 0.3 && numSecPassedWithEyesClosed < 31) {
+                    numSecPassedWithEyesClosed++;
+                } else if (numSecPassedWithEyesClosed > 0) {
                     numSecPassedWithEyesClosed -= 3;
                 }
 
-                if(numSecPassedWithEyesClosed > 15 && !isPlaying)
-                {
+                if (numSecPassedWithEyesClosed > 15 && !isPlaying) {
                     wakeupSound.play();
                     isPlaying = true;
-                }
-                else if(numSecPassedWithEyesClosed < 15)
-                {
+                } else if (numSecPassedWithEyesClosed < 15) {
                     wakeupSound.pause();
                     wakeupSound.load();
                     isPlaying = false;
@@ -81,7 +74,7 @@
         });
 
         detector.start();
-    //}
+    }
 </script>
 </body>
 </html>
