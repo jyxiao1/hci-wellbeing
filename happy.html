@@ -4,19 +4,11 @@
     <script src="https://download.affectiva.com/js/3.2/affdex.js"></script>
     <title> Happy </title>
     <link rel="stylesheet" type="text/css" href="happy.css">
+    <meta charset="UTF-8">
 </head>
 <body>
 <canvas id="confetti"></canvas>
 <h1>Smile!</h1>
-<p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet autem blanditiis consequatur
-    deleniti deserunt eos, fugiat fugit illo inventore ipsa, neque quam qui quisquam recusandae
-    sint sit vel veritatis voluptate.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet autem blanditiis consequatur
-    deleniti deserunt eos, fugiat fugit illo inventore ipsa, neque quam qui quisquam recusandae
-    sint sit vel veritatis voluptate.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet autem blanditiis consequatur
-    deleniti deserunt eos, fugiat fugit illo inventore ipsa, neque quam qui quisquam recusandae
-    sint sit vel veritatis voluptate.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet autem blanditiis consequatur
-    deleniti deserunt eos, fugiat fugit illo inventore ipsa, neque quam qui quisquam recusandae
-    sint sit vel veritatis voluptate.</p>
 
 <div id='video'></div>
 <div id='isHappy'></div>
@@ -61,7 +53,6 @@
                 p.y += p.gravity * dt;
                 p.rotation += p.rotationSpeed * dt;
             }
-
 
             while (pieces.length < numberOfPieces) {
                 pieces.push(new Piece(Math.random() * canvas.width, -20));
@@ -112,7 +103,7 @@
             videoWidth, videoHeight, faceMode
         );
 
-        //detector.detectEmotions.smile = true;
+
         detector.detectAllExpressions();
 
         // Check to see if the webpage was able to connect to the webcam properly
@@ -133,8 +124,8 @@ onImageResults success is called when a frame is processed successfully and rece
 */
         detector.addEventListener('onImageResultsSuccess', function (faces) {
             if (faces.length > 0) {
-                document.querySelector('#isHappy').innerText = parseFloat(faces[0].expressions.joy);
-                document.querySelector('#count').innerText = smileNumber;
+                //document.querySelector('#isHappy').innerText = parseFloat(faces[0].expressions.joy);
+                document.querySelector('#count').innerText = "Smile Score: "+ smileNumber;
 
                 if (parseFloat(faces[0].expressions.smile) > 0.5 && smileNumber < 5100) {
                     smileNumber++;
@@ -158,6 +149,9 @@ onImageResults success is called when a frame is processed successfully and rece
             if (confettiOn){
                 update();
                 draw();
+            }
+            else {
+                update();
             }
 
         });
@@ -196,8 +190,6 @@ onImageResults success is called when a frame is processed successfully and rece
 
     }
 </script>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet autem blanditiis consequatur
-    deleniti deserunt eos, fugiat fugit illo inventore ipsa, neque quam qui quisquam recusandae
-    sint sit vel veritatis voluptate.</p>
+<p>Try smiling to increase your smile score! 😀</p>
 </body>
 </html>
