@@ -10,6 +10,13 @@
 <div id='video'></div>
 <div id='emoji'></div>
 </body>
+
+<audio id="percy">
+  <source src="happy.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<button onclick="playAudio()" type="button">Play Audio</button>
+
 <script>
   window.onload = function() {
     const videoWidth = 640, videoHeight = 480;
@@ -23,6 +30,12 @@
     detector.detectEmotions.anger = true;
     detector.detectAllEmojis();
 
+    const chillMusic = document.getElementById("percy");
+    function playAudio(){
+        chillMusic.play();
+        startCamera();
+    }
+
     setInterval(incrementTime, 1000);
     var secondsPaassed = 0;
     var prevSecondsPassed = 0;
@@ -31,21 +44,16 @@
         secondsPaassed++;
     }
 
-    var beenAngry = 0;
-
     detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
       if( faces.length > 0 && secondsPaassed > prevSecondsPassed) {
           prevSecondsPassed = secondsPaassed;
 
-          if(faces[0].emotions.anger > 5){
-              beenAngry++;
-          }
-          if(beenAngry > 2){
+          if(faces[0].emotions.anger > 30){
+              chillMusic.play();
               alert('Breathe!!!  Please allow yourself to admit that you are angry!\n\n' +
                   'Change your focus: Leave the situation, look in another direction, walk out of the room, or go outside.\n' +
                   'Relax your body: Practicing progressive muscle relaxation can help you calm down and center yourself.\n' +
                   'Get some fresh air: The temperature and air circulation in a room can increase your anxiety or anger.\n')
-              beenAngry = 0;
           }
         document.querySelector('#emoji').innerText = faces[0].emojis.dominantEmoji
       }
