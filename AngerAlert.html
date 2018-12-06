@@ -43,7 +43,7 @@
 
     var t = 999;
 
-      swal("Welcome!", "This page serves to calm students who got frustrated while studying.\n" +
+      swal("Welcome!", "The goal is to calm students who got frustrated while studying.\n" +
           "Please try to act angry and then smile if I made you less angry!");
 
     detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
@@ -53,13 +53,13 @@
         document.querySelector('#emoji').innerText = faces[0].emojis.dominantEmoji
       }
 
-        if(faces[0].emotions.anger > 40){
+        if(faces[0].emotions.anger > 30){
             chillMusic.currentTime = 30;
             chillMusic.play();
             t = secondsPaassed;
         }
 
-        if(faces[0].emotions.anger > 40){
+        if(faces[0].emotions.anger > 30){
             swal({
                 title: "Breathe!!!",
                 text: "Change your focus: Leave the situation, look in another direction, walk out of the room, or go outside.\n" +
@@ -69,7 +69,7 @@
             });
         }
 
-        if(faces[0].emotions.joy > 30 && secondsPaassed>t+10){
+        if(faces[0].emotions.joy > 30 && secondsPaassed>t+40){
             chillMusic.pause();
             swal("Yes!!!", "You finally smiled!", "success");
         }
