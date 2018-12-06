@@ -9,22 +9,21 @@
 </head>
 <body>
 <audio id="alarm">
-    <source src="gentleAlarm.mp3" type="audio/mpeg">
+    <source src="johnCena.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
 <a href="index.html">Back to home</a>
 <div id='video'></div>
-<button onclick="playAudio()" type="button">Play Audio</button>
+<button onclick="playAudio()" type="button">Start the alarm</button>
 <div id='isAwake'></div>
 <div id='count'></div>
+<p>This app is designed to wake you up if you're writing an essay late at night. <br> Close your eyes for too long or put your head down and an alarm will play</p>
 
 <script>
     var numSecPassedWithEyesClosed = 10;
     var isPlaying = false;
-    const wakeupSound = document.getElementById("alarm");
 
     function playAudio() {
-        wakeupSound.play();
         startCamera();
     }
 
@@ -49,7 +48,8 @@
         }
 
         detector.addEventListener('onImageResultsSuccess', function (faces) {
-            if (faces.length > 0 && secondsPassed > prevSecondsPassed) {
+            const wakeupSound = document.getElementById("alarm");
+            if (secondsPassed > prevSecondsPassed) {
                 prevSecondsPassed = secondsPassed;
 
                 if (parseFloat(faces[0].expressions.eyeClosure) > 0.3 && numSecPassedWithEyesClosed < 31) {
@@ -57,19 +57,21 @@
                 } else if (numSecPassedWithEyesClosed > 0) {
                     numSecPassedWithEyesClosed -= 3;
                 }
-
+                if(faces.length < 0)
+                {
+                    numSecPassedWithEyesClosed++;
+                }
+                document.querySelector('#isAwake').innerText = parseFloat(faces[0].expressions.eyeClosure);
                 if (numSecPassedWithEyesClosed > 15 && !isPlaying) {
                     wakeupSound.play();
                     isPlaying = true;
+                    document.querySelector('#count').innerText = "It's time to get up!";
                 } else if (numSecPassedWithEyesClosed < 15) {
                     wakeupSound.pause();
                     wakeupSound.load();
                     isPlaying = false;
+                    document.querySelector('#count').innerText = "Time until alarm " + (15 - numSecPassedWithEyesClosed) + " seconds";
                 }
-
-                document.querySelector('#isAwake').innerText = parseFloat(faces[0].expressions.eyeClosure);
-                document.querySelector('#count').innerText = numSecPassedWithEyesClosed + " seconds";
-
             }
         });
 
