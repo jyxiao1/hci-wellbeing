@@ -1,5 +1,6 @@
 <html>
 <head>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script src="https://download.affectiva.com/js/3.2/affdex.js"></script>
   <style>
     #emoji { font-size:10em; }
@@ -10,6 +11,12 @@
 <div id='video'></div>
 <div id='emoji'></div>
 </body>
+
+<audio id="percy">
+  <source src="troll.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
 <script>
   window.onload = function() {
     const videoWidth = 640, videoHeight = 480;
@@ -21,7 +28,10 @@
     );
 
     detector.detectEmotions.anger = true;
+    detector.detectEmotions.joy = true;
     detector.detectAllEmojis();
+
+    const chillMusic = document.getElementById("percy");
 
     setInterval(incrementTime, 1000);
     var secondsPaassed = 0;
@@ -31,24 +41,38 @@
         secondsPaassed++;
     }
 
-    var beenAngry = 0;
+    var t = 999;
+
+      swal("Welcome!", "The goal is to calm students who got frustrated while studying.\n" +
+          "Please try to act angry and then smile if I made you less angry!");
 
     detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
       if( faces.length > 0 && secondsPaassed > prevSecondsPassed) {
           prevSecondsPassed = secondsPaassed;
 
-          if(faces[0].emotions.anger > 5){
-              beenAngry++;
-          }
-          if(beenAngry > 2){
-              alert('Breathe!!!  Please allow yourself to admit that you are angry!\n\n' +
-                  'Change your focus: Leave the situation, look in another direction, walk out of the room, or go outside.\n' +
-                  'Relax your body: Practicing progressive muscle relaxation can help you calm down and center yourself.\n' +
-                  'Get some fresh air: The temperature and air circulation in a room can increase your anxiety or anger.\n')
-              beenAngry = 0;
-          }
         document.querySelector('#emoji').innerText = faces[0].emojis.dominantEmoji
       }
+
+        if(faces[0].emotions.anger > 30){
+            chillMusic.currentTime = 30;
+            chillMusic.play();
+            t = secondsPaassed;
+        }
+
+        if(faces[0].emotions.anger > 30){
+            swal({
+                title: "Breathe!!!",
+                text: "Change your focus: Leave the situation, look in another direction, walk out of the room, or go outside.\n" +
+                    "Relax your body: Practicing progressive muscle relaxation can help you calm down and center yourself.\n" +
+                    "Get some fresh air: The temperature and air circulation in a room can increase your anxiety or anger.",
+                icon: "warning",
+            });
+        }
+
+        if(faces[0].emotions.joy > 30 && secondsPaassed>t+40){
+            chillMusic.pause();
+            swal("Yes!!!", "You finally smiled!", "success");
+        }
     });
 
     detector.start()
