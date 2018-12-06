@@ -13,7 +13,7 @@
 </body>
 
 <audio id="percy">
-  <source src="percy.mp3" type="audio/mpeg">
+  <source src="troll.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 
@@ -32,14 +32,6 @@
     detector.detectAllEmojis();
 
     const chillMusic = document.getElementById("percy");
-    function playAudio(){
-        chillMusic.play();
-        startCamera();
-    }
-    function pauseAudio(){
-        chillMusic.pause();
-        startCamera();
-    }
 
     setInterval(incrementTime, 1000);
     var secondsPaassed = 0;
@@ -49,50 +41,38 @@
         secondsPaassed++;
     }
 
-    var t = 0;
+    var t = 999;
 
-      swal("Hi!!", "Please try to make angry faces as many times as you can!\n" +
-          "This page serves to help students who got frustrated while studying!");
+      swal("Welcome!", "Please try to trigger the following emoji repeatedly!\n" +
+          "Wink, Rage, Sad");
 
     detector.addEventListener( 'onImageResultsSuccess', function( faces ) {
       if( faces.length > 0 && secondsPaassed > prevSecondsPassed) {
           prevSecondsPassed = secondsPaassed;
 
-          if(10 < faces[0].emotions.anger < 30){
-              playAudio();
-              t = secondsPaassed;
-          }
-
-          if(faces[0].emotions.anger > 30){
-              swal({
-                  title: "Breathe!!!",
-                  text: "Change your focus: Leave the situation, look in another direction, walk out of the room, or go outside.\n" +
-                      "Relax your body: Practicing progressive muscle relaxation can help you calm down and center yourself.\n" +
-                      "Get some fresh air: The temperature and air circulation in a room can increase your anxiety or anger.",
-                  icon: "warning",
-              });
-          }
-
-          if(faces[0].emotions.joy > 30 || secondsPaassed == t+30){
-              pauseAudio();
-          }
-
-          // var isAngry = false;
-          // if(faces[0].emotions.anger>10){
-          //     isAngry = true;
-          // }
-          //
-          // if(isAngry){
-          //     playAudio();
-          //     chillMusic.play();
-          //     alert('Breathe!!!  Please allow yourself to admit that you are angry!\n\n' +
-          //         'Change your focus: Leave the situation, look in another direction, walk out of the room, or go outside.\n' +
-          //         'Relax your body: Practicing progressive muscle relaxation can help you calm down and center yourself.\n' +
-          //         'Get some fresh air: The temperature and air circulation in a room can increase your anxiety or anger.\n')
-          //     isAngry = false;
-          // }
         document.querySelector('#emoji').innerText = faces[0].emojis.dominantEmoji
       }
+
+        if(faces[0].emotions.anger > 40){
+            chillMusic.currentTime = 30;
+            chillMusic.play();
+            t = secondsPaassed;
+        }
+
+        if(faces[0].emotions.anger > 40){
+            swal({
+                title: "Breathe!!!",
+                text: "Change your focus: Leave the situation, look in another direction, walk out of the room, or go outside.\n" +
+                    "Relax your body: Practicing progressive muscle relaxation can help you calm down and center yourself.\n" +
+                    "Get some fresh air: The temperature and air circulation in a room can increase your anxiety or anger.",
+                icon: "warning",
+            });
+        }
+
+        if(faces[0].emotions.joy > 30 && secondsPaassed>t+10){
+            chillMusic.pause();
+            swal("Yes!!!", "You finally smiled!", "success");
+        }
     });
 
     detector.start()
